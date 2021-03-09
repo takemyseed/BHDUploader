@@ -5,7 +5,7 @@ TODO
 * Improving Naming
 * ADD Template System
 
-* ADD ability to manually enter parameters for torrents i.e change category. While in batchmode
+
 
 
 
@@ -114,6 +114,7 @@ Other then imdb,screenshots. They are all optional
 > As they will not reset after the first upload. 
 >     
 > - --imdb
+> - --tmdb
 > - --mediatype
 > - --type
 
