@@ -187,8 +187,12 @@ def clear_movie(args):
     args.mediasource="AUTO-DETECT"
     args.type="AUTO-DETECT"
 
-def getAudio(audio,channels,profile):
+def get_audio(info):
     output=""
+    audio=info.get("audio_codec","")
+    channels=info.get("audio_channels","")
+    profile=info.get("audio_profile","")
+
 
     if isinstance(audio,list):
         for element in audio:
@@ -201,24 +205,13 @@ def getAudio(audio,channels,profile):
         output=output+" MA"
     if channels!="":
         output=output+" "+channels
+    #fix some formatting
+    output=re.sub("Dolby TrueHD","TrueHD",output)
     return output
-def get_extra(title,year,name,res,audio,channels,group):
-    # title=re.sub("\."," ",title)
-    # name=re.sub("\."," ",name)
-    # extra=re.sub(name,"",title)
-    # title=re.sub("\."," ",extra)
-    # extra=re.sub(str(year),"",extra)
-    # extra=re.sub("-"+group,"",extra)
-    # extra=re.sub(group,"",extra)
-    # extra=re.sub(res,"",extra)
-    # extra=re.sub(audio,"",extra)
-    # extra=re.sub(channels,"",extra)
-    # extra=re.sub("[bB][lL][uU][rR][aA][yY]","",extra)
-    # extra=re.sub("[bB][lL][uU]-[rR][aA][yY]","",extra)
-    # extra=re.sub("[dD][tT][sS][hH][dD]-[mM][aA]","",extra)
-    # extra=re.sub("[aA][tT][mM][oO][sS]","",extra)
-    # extra=re.sub("  ","",extra)
+def get_extra(title,info):
     extra=""
+    if re.search("atmos",title,re.IGNORECASE)!=None:
+        extra=extra+"ATMOS"
     return extra
 def get_title(args,path):
     title=os.path.basename(path)
@@ -230,54 +223,55 @@ def get_title(args,path):
     group=info.get("release_group","Unknown")
     channels=info.get("audio_channels","")
     codec=info.get("video_codec")
-    audio=getAudio(info.get("audio_codec",""),info.get("audio_channels",""), info.get("audio_profile",""))
-    extra=get_extra(title,year,name,res,audio,channels,group)
+    audio=get_audio(info)
+    extra=get_extra(title,info)
     season="S0"+info.get("season","")
     if args.type=="Movie" and re.search("blur|blu-r",title,re.IGNORECASE)!=None and re.search("remux",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} Blu-ray AVC Remux-{group}"
+        output_title=f"{name} {year} {res} Blu-ray AVC Remux {audio } {extra}-{group}"
 
 
     elif args.type=="Movie" and re.search("blur|blu-r",title,re.IGNORECASE)!=None and re.search("264|265",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} Blu-ray {codec}-{group}"
+        output_title=f"{name} {year} {res} Blu-ray {codec} {audio } {extra}-{group}"
 
     elif args.type=="Movie" and re.search("dvd",title,re.IGNORECASE)!=None and re.search("remux",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} DVD Remux-{group}"
+        output_title=f"{name} {year} {res} DVD Remux {audio } {extra}-{group}"
 
     elif args.type=="Movie" and re.search("hddvd",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} DVD-{group}"
+        output_title=f"{name} {year} {res} DVD {codec} {audio } {extra}--{group}"
 
     elif args.type=="Movie" and re.search("dvd",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} DVD {codec}-{group}"
+        output_title=f"{name} {year} {res} DVD {codec} {audio } {extra}-{group}"
 
     elif args.type=="Movie" and re.search("webd|web-d",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} WEB-DL-{group}"
+        output_title=f"{name} {year} {res} WEB-DL {audio } {extra}-{group}"
     elif args.type=="Movie" and re.search("webr|web=r",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} WEB-RIP-{group}"
+        output_title=f"{name} {year} {res} WEB-RIP {codec} {audio } {extra}-{group}"
     elif args.type=="Movie" and re.search("hdtv",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} HDTV-{group}"
+        output_title=f"{name} {year} {res} HDTV {codec} {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("blur|blu-r",title,re.IGNORECASE)!=None  and re.search("remux",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {season}{res} Blu-ray Remux-{group}"
+        output_title=f"{name} {year} {season} {res} Blu-ray Remux {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("blur|blu-r",title,re.IGNORECASE)!=None and re.search("264|265",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {season}{res} Blu-ray {codec}-{group}"
+        output_title=f"{name} {year} {season} {res} Blu-ray {codec} {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("dvd",title,re.IGNORECASE)!=None and re.search("remux",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {season}{res} DVD Remux-{group}"
+        output_title=f"{name} {year} {season} {res} DVD Remux {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("hddvd",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {season}{res} DVD-{group}"
+        output_title=f"{name} {year} {season} {res} DVD {codec} {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("dvd",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {season}{res} DVD {codec}-{group}"
+        output_title=f"{name} {year} {season} {res} DVD {codec} {audio } {extra}-{group}"
 
     elif args.type=="TV" and re.search("webd|web-d",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} {season}WEB-DL-{group}"
+        output_title=f"{name} {year} {res} {season} WEB-DL {audio } {extra}-{group}"
     elif args.type=="TV" and re.search("webr|web-r",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} {season}WEB-RIP-{group}"
+        output_title=f"{name} {year} {res} {season} WEB-RIP {codec} {audio } {extra}-{group}"
     elif args.type=="TV" and re.search("hdtv",title,re.IGNORECASE)!=None:
-        output_title=f"{name} {year} {res} {season}HDTV-{group}"
-
+        output_title=f"{name} {year} {res} {season} HDTV {codec} {audio } {extra}-{group}"
+        #final title fixes
+    output_title=re.sub(" -","-",output_title)
     return output_title
 
 
@@ -706,9 +700,9 @@ def download_torrent(args,BHD_link,path):
         clienturl=re.sub("unix","scgi",args.clienturl)
         server = SCGIServerProxy(clienturl)
         if args.clientcat!=None:
-            server.load.start_verbose("",temptor,f"d.directory_base.set={path}",f"d.custom1.set={args.clientcat}")
+            server.load.start_verbose("",temptor,f"d.directory_base.set={args.media}",f"d.custom1.set={args.clientcat}")
         else:
-            server.load.start_verbose("",temptor,f"d.directory_base.set={path}")
+            server.load.start_verbose("",temptor,f"d.directory_base.set={args.media}")
 
 
 def add_fast_resume(meta, datapath):
