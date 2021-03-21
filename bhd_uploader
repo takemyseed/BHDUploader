@@ -319,7 +319,7 @@ def get_imdb_info(path):
     bhdlogger.warn("Searching for movie/TV Show on IMDB\n")
     while accept!="Yes":
         if counter==6:
-            id=input("Please Enter imdb id: ")
+            id=input("Pleases Enter imdb id: ")
             id=re.sub("https://www.imdb.com/title/","",id)
             id=re.sub("tt","",id)
             id=re.sub("/","",id)
