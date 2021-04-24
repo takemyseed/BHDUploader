@@ -139,7 +139,7 @@ There is some combability issues with using path and windows, that causes issues
 # Examples
     *Anything in brackets is to replace by user value
 ## Rtorrent
-`bhd_uploader.py --client rtorrent --clienturl <url> --media <path> --bhdapi <api> -- tmdbpapi <tmdbapi> --imgbb <apikey>
+`bhd_uploader.py  --client rtorrent --clienturl <url> --media <path> --bhdapi <api> -- tmdbpapi <tmdbapi> --imgbb <apikey>
     
     optional
     - --clientcat
