@@ -88,7 +88,7 @@ optional
     - deluge
     - watchdir:If  client is not any of the above values, then it is a "watchdir". To properly use pass the full path to the directory you want to upload to
 
-- -- clientpass:For clients that need passwords forauth
+- -- clientpass:For clients that need passwords for auth
 - -- clientuser: For clients that need usernames for auth
 - -- clientcat: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
 - -- clienturl: url for the client 
@@ -97,9 +97,9 @@ optional
 ## [bhd Auth]
  These are all required to upload, autoretrive upload link  
 
-- -- bhdapi: apikey from security
-- -- tmdbpapi : apikey provided by tmdb
-- -- imbgg : For uploading to imgbb, you can make an anon account
+- --bhdapi: apikey from security
+- --tmdbpapi : apikey provided by tmdb
+- --imbgg : For uploading to imgbb, you can make an anon account
 
 ## [Torrent]
     
@@ -139,13 +139,13 @@ There is some combability issues with using path and windows, that causes issues
 # Examples
     *Anything in brackets is to replace by user value
 ## Rtorrent
-`bhd_uploader.py --client rtorrent --clienturl <url> --passkey <passkey> --cookie <filepath> --media <path> --uid <uid>`
+`bhd_uploader.py --client rtorrent --clienturl <url> --media <path> --bhdapi <api> -- tmdbpapi <tmdbapi> --imgbb <apikey>
     
     optional
     - --clientcat
 
 ## Watchdir
-`bhd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media <path> --uid  <uid>`
+`bhd_uploader.py  --media <path> --bhdapi <api> -- tmdbpapi <tmdbapi> --imgbb <apikey>
 ## Config
 * Please make sure your config is filled with all required info, for example rtorrent needs all the paramters from the rtorrent example. For Parameter Usage Please Go to the Parameter section
 
